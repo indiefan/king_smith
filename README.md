@@ -14,7 +14,7 @@ Currently this integration adds a switch for main belt and a number entity to co
 
 This integration discovers/connects to the device using bluetooth (you may need to configure a bluetooth proxy like an ESP32).
 
-It has been tested with a C1 (the model I personally own), but is likely to work with other models supported by the underlying library.
+It has been tested with a C2 (the model I personally own), but is likely to work with other models supported by the underlying library.
 
 In order for the device to be connected to HA, it must not be connected to another device (e.g. the mobile app). If it is already configured via the mobile app, you will have to disconnect it before using it in HA.
 
@@ -30,6 +30,12 @@ In order for the device to be connected to HA, it must not be connected to anoth
 1. If the treadmill is on and not currently connected to another device, it should show up in the `Discovered` list. Click `configure` and give it a name.
 
 ## Configuration is done in the UI
+
+## Verified Supported Models
+
+* C2
+
+(if you have a King Smith treadmill and would like to verify support, please reach out)
 
 ## Contributions are welcome!
 
