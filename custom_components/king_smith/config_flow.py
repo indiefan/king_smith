@@ -5,9 +5,8 @@ import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.components import bluetooth
 from homeassistant.const import CONF_MAC, CONF_NAME
-from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResult
-from homeassistant.helpers import config_entry_flow, device_registry
+from homeassistant.helpers import device_registry
 
 from .const import DOMAIN
 

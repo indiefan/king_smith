@@ -1,16 +1,12 @@
-import asyncio
 
 from datetime import timedelta
-from typing import Any
 
 from homeassistant.components.number import (
-    ENTITY_ID_FORMAT,
     NumberEntity,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_MAC, CONF_NAME
-from homeassistant.core import HomeAssistant, async_get_hass, callback
-from homeassistant.helpers.entity import generate_entity_id
+from homeassistant.const import CONF_NAME
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN

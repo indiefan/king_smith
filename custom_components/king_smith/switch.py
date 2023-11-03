@@ -1,21 +1,15 @@
-import asyncio
 import logging
 
 from datetime import timedelta
-from typing import Any
 
 from homeassistant.components.switch import (
-    ENTITY_ID_FORMAT,
     SwitchEntity,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_MAC, CONF_NAME
+from homeassistant.const import CONF_NAME
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.entity import generate_entity_id
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from ph4_walkingpad import pad
-from ph4_walkingpad.pad import WalkingPad, Controller, WalkingPadCurStatus
 
 from .const import DOMAIN
 from .coordinator import WalkingPadCoordinator

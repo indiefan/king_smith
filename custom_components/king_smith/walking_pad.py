@@ -42,7 +42,7 @@ class WalkingPadApi:
         self._status_lock = False
 
     def _on_status_update(self, sender, status: WalkingPadCurStatus) -> None:
-        """Update current state"""
+        """Update current state."""
         # Don't update if we're still running a command or just did (status from device is outdated at first)
         if (
             self._status_lock
@@ -130,7 +130,7 @@ class WalkingPadApi:
         print(f"Setting belt speed to {speed}")
         lock = self._begin_cmd()
         async with lock:
-            print(f"Acquired lock, setting speed")
+            print("Acquired lock, setting speed")
             await self._ctrl.change_speed(speed)
             self._speed = speed
             await self._end_cmd()
