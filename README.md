@@ -8,15 +8,15 @@
 [![BuyMeCoffee][buymecoffeebadge]][buymecoffee]
 
 
-_Integration to integrate Home Assistant with [King Smith Walking Pads][king_smith].
+Custom integration to connect Home Assistant with [King Smith Walking Pads][king_smith].
 
 Currently this integration adds a switch for main belt and a number entity to control/monitor the belt speed (in mph).
 
 This integration discovers/connects to the device using bluetooth (you may need to configure a bluetooth proxy like an ESP32).
 
-It has been tested with a C1 (the model I personally own) but is likely to work with other models supported by the underlying library.
+It has been tested with a C1 (the model I personally own), but is likely to work with other models supported by the underlying library.
 
-In order for the device to be connected to HA, it must not be connected to another device (e.g. the phone app). If it is already configured via the phone app, you will have to disconnect it before using it in HA.
+In order for the device to be connected to HA, it must not be connected to another device (e.g. the mobile app). If it is already configured via the mobile app, you will have to disconnect it before using it in HA.
 
 ## Installation
 
