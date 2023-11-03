@@ -1,0 +1,24 @@
+{
+    "bluetooth": [
+        {
+            "local_name": "KS-BL*"
+        }
+    ],
+    "codeowners": [
+        "@indiefan"
+    ],
+    "config_flow": true,
+    "dependencies": [
+        "bluetooth"
+    ],
+    "documentation": "https://github.com/indiefan/king_smith",
+    "domain": "king_smith",
+    "iot_class": "local_polling",
+    "issue_tracker": "https://github.com/indiefan/king_smith/issues",
+    "name": "King Smith Walking Pad",
+    "requirements": [
+        "bleak>=0.18.0",
+        "ph4-walkingpad>=0.0.7"
+    ],
+    "version": "0.1.0"
+}

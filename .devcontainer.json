@@ -1,12 +1,15 @@
 {
-    "name": "ludeeus/integration_blueprint",
+    "name": "indiefan/king_smith",
     "image": "mcr.microsoft.com/devcontainers/python:3.11-bullseye",
+    "appPort": [
+        "8125:8125"
+    ],
     "postCreateCommand": "scripts/setup",
     "forwardPorts": [
-        8123
+        8125
     ],
     "portsAttributes": {
-        "8123": {
+        "8125": {
             "label": "Home Assistant",
             "onAutoForward": "notify"
         }

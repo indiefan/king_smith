@@ -1,8 +1,15 @@
 # https://www.home-assistant.io/integrations/default_config/
 default_config:
 
+api:
+
+bluetooth:
+
 # https://www.home-assistant.io/integrations/logger/
 logger:
   default: info
   logs:
-    custom_components.integration_blueprint: debug
+    custom_components.king_smith: debug
+
+http:
+  server_port: 8125
