@@ -1,3 +1,4 @@
+"""Walking Pad Switch Entities."""
 import logging
 
 from datetime import timedelta
@@ -26,6 +27,7 @@ async def async_setup_entry(
     config_entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
+    """Set up the entity."""
     name = config_entry.data.get(CONF_NAME) or DOMAIN
     data = hass.data[DOMAIN][config_entry.entry_id]
 
@@ -57,15 +59,18 @@ class WalkingPadSwitch(WalkingPadEntity, SwitchEntity):
         self.schedule_update_ha_state()
 
     async def async_added_to_hass(self) -> None:
+        """Handle the entity being added to hass."""
         await super().async_added_to_hass()
         await self._walking_pad_api.connect()
 
     async def async_will_remove_from_hass(self) -> None:
+        """Handle the entity being removed from hass."""
         await self._walking_pad_api.disconnect()
         return await super().async_will_remove_from_hass()
 
     @property
     def is_on(self):
+        """Whether or not the switch is currrently on."""
         return self._on
 
     async def async_turn_on(self):

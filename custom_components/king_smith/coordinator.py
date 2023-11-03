@@ -1,3 +1,4 @@
+"""The Walking Pad Coordinator."""
 from datetime import datetime
 import logging
 import time

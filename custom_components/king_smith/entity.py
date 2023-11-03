@@ -1,3 +1,4 @@
+"""Shared Walking Pad Entity Base Class."""
 from typing import Any
 
 from homeassistant.core import callback
@@ -13,7 +14,10 @@ ENTITY_ID_FORMAT = DOMAIN + ".{}"
 
 
 class WalkingPadEntity(CoordinatorEntity[WalkingPadCoordinator]):
+    """Walking Pad Entity Base Class."""
+
     def __init__(self, name: str, walking_pad_api: WalkingPadApi, coordinator) -> None:
+        """Initialize the entity."""
         super().__init__(coordinator)
         self._coordinator = coordinator
         self._walking_pad_api = walking_pad_api
@@ -24,10 +28,12 @@ class WalkingPadEntity(CoordinatorEntity[WalkingPadCoordinator]):
         self.async_write_ha_state()
 
     async def async_update(self) -> None:
+        """Handle an update."""
         await self._walking_pad_api.update_state()
 
     @property
     def device_info(self) -> dict[str, Any]:
+        """Return the device info."""
         prop = {
             "identifiers": {(DOMAIN, self.unique_id)},
             "name": self._name,
@@ -43,6 +49,7 @@ class WalkingPadEntity(CoordinatorEntity[WalkingPadCoordinator]):
 
     @property
     def name(self):
+        """Name."""
         return self._name
 
     @property
@@ -52,4 +59,5 @@ class WalkingPadEntity(CoordinatorEntity[WalkingPadCoordinator]):
 
     @property
     def available(self):
+        """Available."""
         return self._walking_pad_api.connected

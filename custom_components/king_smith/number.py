@@ -1,4 +1,5 @@
 
+"""Walking Pad Number Entities."""
 from datetime import timedelta
 
 from homeassistant.components.number import (
@@ -27,6 +28,7 @@ async def async_setup_entry(
     config_entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
+    """Set up entity."""
     name = config_entry.data.get(CONF_NAME) or DOMAIN
     data = hass.data[DOMAIN][config_entry.entry_id]
 
@@ -35,12 +37,15 @@ async def async_setup_entry(
 
 
 class WalkingPadSpeed(WalkingPadEntity, NumberEntity):
+    """Walking Pad Speed Entity."""
+
     def __init__(
         self,
         name: str,
         walking_pad_api: WalkingPadApi,
         coordinator: WalkingPadCoordinator,
     ) -> None:
+        """Initialize the Number entity."""
         self._name = f"{name} Speed"
         self._raw_kph = walking_pad_api.speed
 
@@ -65,21 +70,26 @@ class WalkingPadSpeed(WalkingPadEntity, NumberEntity):
 
     @property
     def native_min_value(self) -> float:
+        """Minimum value."""
         return MIN_VALUE
 
     @property
     def native_max_value(self) -> float:
+        """Maximum value."""
         return MAX_VALUE
 
     @property
     def native_step(self) -> float | None:
+        """Step value."""
         return STEP
 
     @property
     def native_value(self) -> float | None:
+        """Current value."""
         return self._raw_kph_to_mph(self._raw_kph)
 
     async def async_set_native_value(self, value: float) -> None:
+        """Set the speed."""
         kph_to_set = int(self._mph_to_raw_kph(value))
 
         self._raw_kph = kph_to_set
