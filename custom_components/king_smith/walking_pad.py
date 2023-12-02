@@ -28,6 +28,8 @@ class WalkingPadApi:
         self._moving = False
         self._speed = 0
         self._distance = 0
+        self._time = 0
+        self._steps = 0
 
         self._register_controller_callbacks()
 
@@ -55,6 +57,8 @@ class WalkingPadApi:
         self._moving = status.speed > 0
         self._speed = status.speed
         self._distance = status.dist
+        self._time = status.time
+        self._steps = status.steps
 
         if len(self._callbacks) > 0:
             for callback in self._callbacks:
@@ -93,6 +97,16 @@ class WalkingPadApi:
     def distance(self):
         """The current device distance."""
         return self._distance
+
+    @property
+    def time(self):
+        """The duration of the current session."""
+        return self._time
+
+    @property
+    def steps(self):
+        """The number of steps taken in the current session."""
+        return self._steps
 
     async def connect(self) -> None:
         """Connect the device."""

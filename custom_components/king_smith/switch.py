@@ -28,10 +28,10 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up the entity."""
-    name = config_entry.data.get(CONF_NAME) or DOMAIN
+    treadmillName = config_entry.data.get(CONF_NAME) or DOMAIN
     data = hass.data[DOMAIN][config_entry.entry_id]
 
-    entity = WalkingPadSwitch(name, data["device"], data["coordinator"])
+    entity = WalkingPadSwitch(treadmillName, data["device"], data["coordinator"])
     async_add_entities([entity])
 
 
@@ -40,15 +40,14 @@ class WalkingPadSwitch(WalkingPadEntity, SwitchEntity):
 
     def __init__(
         self,
-        name: str,
+        treadmillName: str,
         walking_pad_api: WalkingPadApi,
         coordinator: WalkingPadCoordinator,
     ) -> None:
         """Initialize the belt."""
-        self._name = f"{name} Belt"
         self._on = walking_pad_api.moving
 
-        super().__init__(name, walking_pad_api, coordinator)
+        super().__init__(treadmillName, walking_pad_api, coordinator)
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -88,3 +87,8 @@ class WalkingPadSwitch(WalkingPadEntity, SwitchEntity):
         await self._walking_pad_api.turn_off()
         self._on = False
         self.schedule_update_ha_state()
+
+    @property 
+    def unique_id(self) -> str:
+        """Return a unique ID."""
+        return f"{self._walking_pad_api.mac}_switch"

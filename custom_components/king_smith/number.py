@@ -6,7 +6,7 @@ from homeassistant.components.number import (
     NumberEntity,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_NAME
+from homeassistant.const import CONF_NAME, UnitOfSpeed
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -17,11 +17,9 @@ from .walking_pad import WalkingPadApi
 
 
 SCAN_INTERVAL = timedelta(seconds=5)
-KPH_TO_MPH = 0.621371
 MIN_VALUE = 0.0
-MAX_VALUE = 4.0
+MAX_VALUE = 6.0
 STEP = 0.1
-
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -29,43 +27,32 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up entity."""
-    name = config_entry.data.get(CONF_NAME) or DOMAIN
+    treadmillName = config_entry.data.get(CONF_NAME) or DOMAIN
     data = hass.data[DOMAIN][config_entry.entry_id]
 
-    entity = WalkingPadSpeed(name, data["device"], data["coordinator"])
+    entity = WalkingPadSpeed(treadmillName, data["device"], data["coordinator"])
     async_add_entities([entity])
 
 
 class WalkingPadSpeed(WalkingPadEntity, NumberEntity):
     """Walking Pad Speed Entity."""
 
+    _attr_native_unit_of_measurement = UnitOfSpeed.KILOMETERS_PER_HOUR
+    _attr_has_entity_name = True
+
     def __init__(
         self,
-        name: str,
+        treadmillName: str,
         walking_pad_api: WalkingPadApi,
         coordinator: WalkingPadCoordinator,
     ) -> None:
         """Initialize the Number entity."""
-        self._name = f"{name} Speed"
-        self._raw_kph = walking_pad_api.speed
-
-        super().__init__(name, walking_pad_api, coordinator)
-
-    def _raw_kph_to_mph(self, kph):
-        if kph > 0:
-            return round((kph * KPH_TO_MPH) / 10, 1)
-
-        return kph
-
-    def _mph_to_raw_kph(self, mph):
-        if mph > 0:
-            return round((mph * 10) / KPH_TO_MPH, 0)
-
-        return mph
+        self._kph = walking_pad_api.speed / 10.0
+        super().__init__(treadmillName, walking_pad_api, coordinator)
 
     @callback
     def _handle_coordinator_update(self) -> None:
-        self._raw_kph = self._walking_pad_api.speed
+        self._kph = self._walking_pad_api.speed / 10
         self.schedule_update_ha_state()
 
     @property
@@ -86,12 +73,14 @@ class WalkingPadSpeed(WalkingPadEntity, NumberEntity):
     @property
     def native_value(self) -> float | None:
         """Current value."""
-        return self._raw_kph_to_mph(self._raw_kph)
+        return self._kph
 
     async def async_set_native_value(self, value: float) -> None:
         """Set the speed."""
-        kph_to_set = int(self._mph_to_raw_kph(value))
-
-        self._raw_kph = kph_to_set
-        await self._walking_pad_api.change_speed(kph_to_set)
+        await self._walking_pad_api.change_speed(int(value * 10))
         self.schedule_update_ha_state()
+
+    @property
+    def unique_id(self) -> str:
+        """Return a unique ID."""
+        return f"{self._walking_pad_api.mac}_speed"
