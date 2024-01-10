@@ -4,6 +4,9 @@
     "bluetooth": [
         {
             "local_name": "KS-BL*"
+        },
+        {
+            "local_name": "WalkingPad"
         }
     ],
     "codeowners": [
