@@ -32,18 +32,15 @@ async def async_setup_entry(
     timeEntity = TimeSensor(treadmillName, walking_pad_api, coordinator)
     speedEntity = SpeedSensor(treadmillName, walking_pad_api, coordinator)
     stepsEntity = StepsSensor(treadmillName, walking_pad_api, coordinator)
-    timeTotalEntity = TimeTotalSensor(treadmillName, walking_pad_api, coordinator)
-    distanceTotalentity = DistanceTotalSensor(treadmillName, walking_pad_api, coordinator)
-    stepsTotalEntity = StepsTotalSensor(treadmillName, walking_pad_api, coordinator)
     
-    async_add_entities([entity, timeEntity, speedEntity, stepsEntity, timeTotalEntity, stepsTotalEntity, distanceTotalentity])
+    async_add_entities([entity, timeEntity, speedEntity, stepsEntity])
 
 class DistanceSensor(WalkingPadEntity, SensorEntity):
     """Session Distance walked in the current session"""
 
     _attr_native_unit_of_measurement = UnitOfLength.KILOMETERS
     _attr_device_class = SensorDeviceClass.DISTANCE
-    _attr_state_class = SensorStateClass.TOTAL
+    _attr_state_class = SensorStateClass.TOTAL_INCREASING
     _attr_has_entity_name = True
 
     def __init__(self, treadmillName: str, walking_pad_api: WalkingPadApi, coordinator: WalkingPadCoordinator) -> None:
@@ -65,44 +62,12 @@ class DistanceSensor(WalkingPadEntity, SensorEntity):
         """Return a unique ID."""
         return f"{self._walking_pad_api.mac}_distance"
 
-class DistanceTotalSensor(WalkingPadEntity, SensorEntity):
-    """Total Distance walked"""
-
-    _attr_native_unit_of_measurement = UnitOfLength.KILOMETERS
-    _attr_device_class = SensorDeviceClass.DISTANCE
-    _attr_state_class = SensorStateClass.TOTAL_INCREASING
-    _attr_has_entity_name = True
-
-    def __init__(self, treadmillName: str, walking_pad_api: WalkingPadApi, coordinator: WalkingPadCoordinator) -> None:
-        self._state = 0.0
-        super().__init__(treadmillName, walking_pad_api, coordinator)
-
-    @callback
-    def _handle_coordinator_update(self) -> None:
-        self._state = self._walking_pad_api.distance / 100
-        self.async_write_ha_state()
-
-    @property
-    def native_value(self):
-        """Return the state of the sensor."""
-        return self._state
-
-    @property
-    def unique_id(self) -> str:
-        """Return a unique ID."""
-        return f"{self._walking_pad_api.mac}_distance_total"
-    
-    @property
-    def name(self):
-        """Return the name of the sensor."""
-        return "Distance Total"
-
 class TimeSensor(WalkingPadEntity, SensorEntity):
     """Session Time walked in the current session"""
 
     _attr_native_unit_of_measurement = UnitOfTime.SECONDS
     _attr_device_class = SensorDeviceClass.DURATION
-    _attr_state_class = SensorStateClass.TOTAL
+    _attr_state_class = SensorStateClass.TOTAL_INCREASING
     _attr_has_entity_name = True
 
     def __init__(self, treadmillName: str, walking_pad_api: WalkingPadApi, coordinator: WalkingPadCoordinator) -> None:
@@ -123,38 +88,6 @@ class TimeSensor(WalkingPadEntity, SensorEntity):
     def unique_id(self) -> str:
         """Return a unique ID."""
         return f"{self._walking_pad_api.mac}_time"
-
-class TimeTotalSensor(WalkingPadEntity, SensorEntity):
-    """Total Session Time"""
-
-    _attr_native_unit_of_measurement = UnitOfTime.SECONDS
-    _attr_device_class = SensorDeviceClass.DURATION
-    _attr_state_class = SensorStateClass.TOTAL_INCREASING
-    _attr_has_entity_name = True
-
-    def __init__(self, treadmillName: str, walking_pad_api: WalkingPadApi, coordinator: WalkingPadCoordinator) -> None:
-        self._state = None
-        super().__init__(treadmillName, walking_pad_api, coordinator)
-
-    @callback
-    def _handle_coordinator_update(self) -> None:
-        self._state = self._walking_pad_api.time
-        self.async_write_ha_state()
-
-    @property
-    def native_value(self):
-        """Return the state of the sensor."""
-        return self._state
-
-    @property
-    def unique_id(self) -> str:
-        """Return a unique ID."""
-        return f"{self._walking_pad_api.mac}_time_total"
-    
-    @property
-    def name(self):
-        """Return the name of the sensor."""
-        return "Time Total"
 
 class SpeedSensor(WalkingPadEntity, SensorEntity):
     """Speed walked in the current session"""
@@ -186,7 +119,7 @@ class SpeedSensor(WalkingPadEntity, SensorEntity):
 class StepsSensor(WalkingPadEntity, SensorEntity):
     """Steps walked in the current session"""
 
-    _attr_state_class = SensorStateClass.TOTAL
+    _attr_state_class = SensorStateClass.TOTAL_INCREASING
     _attr_has_entity_name = True
 
     def __init__(self, treadmillName: str, walking_pad_api: WalkingPadApi, coordinator: WalkingPadCoordinator) -> None:
@@ -212,33 +145,3 @@ class StepsSensor(WalkingPadEntity, SensorEntity):
     def name(self):
         """Return the name of the sensor."""
         return "Steps"
-
-class StepsTotalSensor(WalkingPadEntity, SensorEntity):
-    """Total Steps walked"""
-
-    _attr_state_class = SensorStateClass.TOTAL_INCREASING
-    _attr_has_entity_name = True
-
-    def __init__(self, treadmillName: str, walking_pad_api: WalkingPadApi, coordinator: WalkingPadCoordinator) -> None:
-        self._state = 0
-        super().__init__(treadmillName, walking_pad_api, coordinator)
-
-    @callback
-    def _handle_coordinator_update(self) -> None:
-        self._state = self._walking_pad_api.steps
-        self.async_write_ha_state()
-
-    @property
-    def native_value(self):
-        """Return the state of the sensor."""
-        return self._state
-
-    @property
-    def unique_id(self) -> str:
-        """Return a unique ID."""
-        return f"{self._walking_pad_api.mac}_steps_total"
-
-    @property
-    def name(self):
-        """Return the name of the sensor."""
-        return "Steps Total"
