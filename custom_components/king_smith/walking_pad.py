@@ -126,6 +126,9 @@ class WalkingPadApi:
 
     async def turn_on(self) -> None:
         """Turn on the device."""
+        if self.connected != True:
+            return
+
         lock = self._begin_cmd()
         async with lock:
             await self._ctrl.switch_mode(WalkingPad.MODE_MANUAL)
@@ -133,6 +136,9 @@ class WalkingPadApi:
 
     async def turn_off(self) -> None:
         """Turn off the device."""
+        if self.connected != True:
+            return
+
         lock = self._begin_cmd()
         async with lock:
             await self._ctrl.switch_mode(WalkingPad.MODE_STANDBY)
@@ -140,6 +146,9 @@ class WalkingPadApi:
 
     async def start_belt(self) -> None:
         """Start the belt."""
+        if self.connected != True:
+            return
+
         lock = self._begin_cmd()
         async with lock:
             await self._ctrl.start_belt()
@@ -148,6 +157,9 @@ class WalkingPadApi:
 
     async def stop_belt(self) -> None:
         """Stop the belt."""
+        if self.connected != True:
+            return
+
         lock = self._begin_cmd()
         async with lock:
             await self._ctrl.stop_belt()
@@ -156,6 +168,9 @@ class WalkingPadApi:
 
     async def change_speed(self, speed: int) -> None:
         """Change the speed."""
+
+        if self.connected != True:
+            return
         lock = self._begin_cmd()
         async with lock:
             await self._ctrl.change_speed(speed)
@@ -164,6 +179,9 @@ class WalkingPadApi:
 
     async def update_state(self) -> None:
         """Update device state."""
+        if self.connected != True:
+            return
+
         # Grab the lock so we don't run while another command is running
         lock = self._begin_cmd()
         async with lock:
