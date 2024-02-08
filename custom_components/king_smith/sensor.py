@@ -3,7 +3,8 @@ from __future__ import annotations
 
 from homeassistant.components.sensor import ( SensorDeviceClass,
                                              SensorEntity,
-                                             SensorStateClass
+                                             SensorStateClass,
+                                             RestoreSensor
                                              )
 from homeassistant.components.sensor.const import UnitOfTime
 from homeassistant.config_entries import ConfigEntry
@@ -33,7 +34,11 @@ async def async_setup_entry(
     speedEntity = SpeedSensor(treadmillName, walking_pad_api, coordinator)
     stepsEntity = StepsSensor(treadmillName, walking_pad_api, coordinator)
 
-    async_add_entities([distanceEntity, timeEntity, speedEntity, stepsEntity])
+    totalDistanceEntity = TotalDistanceSensor(treadmillName, walking_pad_api, coordinator)
+    totalTimeEntity = TotalTimeSensor(treadmillName, walking_pad_api, coordinator)
+    totalStepsEntity = TotalStepsSensor(treadmillName, walking_pad_api, coordinator)
+
+    async_add_entities([distanceEntity, timeEntity, speedEntity, stepsEntity, totalDistanceEntity, totalTimeEntity, totalStepsEntity])
 
 class DistanceSensor(WalkingPadEntity, SensorEntity):
     """Session Distance walked in the current session"""
@@ -160,3 +165,150 @@ class StepsSensor(WalkingPadEntity, SensorEntity):
     def name(self) -> str:
         """Return the name of the sensor."""
         return "Steps"
+
+
+
+class TotalDistanceSensor(WalkingPadEntity, RestoreSensor):
+    """Total Distance walked since HA restart"""
+
+    _attr_native_unit_of_measurement = UnitOfLength.KILOMETERS
+    _attr_device_class = SensorDeviceClass.DISTANCE
+    _attr_state_class = SensorStateClass.TOTAL_INCREASING
+    _attr_has_entity_name = True
+
+    _last = 0
+
+    def __init__(self, treadmillName: str, walking_pad_api: WalkingPadApi, coordinator: WalkingPadCoordinator) -> None:
+        self._state = 0.0
+        self._last = 0
+        super().__init__(treadmillName, walking_pad_api, coordinator)
+
+    async def async_added_to_hass(self) -> None:
+        """Restore native_value."""
+        await super().async_added_to_hass()
+        if (last_sensor_data := await self.async_get_last_sensor_data()) is None:
+            return
+        self._state = last_sensor_data.native_value
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        val = self._walking_pad_api.distance / 100
+
+        if val >= self._last:
+            self._state += val - self._last
+        else:
+            self._state += val
+
+        self._last = val
+
+        self.async_write_ha_state()
+
+    @property
+    def native_value(self):
+        """Return the state of the sensor."""
+        return self._state
+
+    @property
+    def unique_id(self) -> str:
+        """Return a unique ID."""
+        return f"{self._walking_pad_api.mac}_total_distance"
+
+    @property
+    def name(self) -> str:
+        """Return the name of the sensor."""
+        return "Total Distance"
+
+class TotalTimeSensor(WalkingPadEntity, RestoreSensor):
+    """Total Time walked since HA restart"""
+
+    _attr_native_unit_of_measurement = UnitOfTime.SECONDS
+    _attr_device_class = SensorDeviceClass.DURATION
+    _attr_state_class = SensorStateClass.TOTAL_INCREASING
+    _attr_has_entity_name = True
+
+    _last = 0
+
+    def __init__(self, treadmillName: str, walking_pad_api: WalkingPadApi, coordinator: WalkingPadCoordinator) -> None:
+        self._state = None
+        self._last = 0
+        super().__init__(treadmillName, walking_pad_api, coordinator)
+
+    async def async_added_to_hass(self) -> None:
+        """Restore native_value."""
+        await super().async_added_to_hass()
+        if (last_sensor_data := await self.async_get_last_sensor_data()) is None:
+            return
+        self._state = last_sensor_data.native_value
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        val = self._walking_pad_api.time
+
+        if val >= self._last:
+            self._state += val - self._last
+        else:
+            self._state += val
+
+        self._last = val
+        self.async_write_ha_state()
+
+    @property
+    def native_value(self):
+        """Return the state of the sensor."""
+        return self._state
+
+    @property
+    def unique_id(self) -> str:
+        """Return a unique ID."""
+        return f"{self._walking_pad_api.mac}_total_time"
+
+    @property
+    def name(self) -> str:
+        """Return the name of the sensor."""
+        return "Total Time"
+
+class TotalStepsSensor(WalkingPadEntity, RestoreSensor):
+    """Total Steps walked since HA restart"""
+
+    _attr_state_class = SensorStateClass.TOTAL_INCREASING
+    _attr_has_entity_name = True
+
+    _last = 0
+
+    def __init__(self, treadmillName: str, walking_pad_api: WalkingPadApi, coordinator: WalkingPadCoordinator) -> None:
+        self._state = 0
+        self._last = 0
+        super().__init__(treadmillName, walking_pad_api, coordinator)
+
+    async def async_added_to_hass(self) -> None:
+        """Restore native_value."""
+        await super().async_added_to_hass()
+        if (last_sensor_data := await self.async_get_last_sensor_data()) is None:
+            return
+        self._state = last_sensor_data.native_value
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        val = self._walking_pad_api.steps
+
+        if val >= self._last:
+            self._state += val - self._last
+        else:
+            self._state += val
+
+        self.async_write_ha_state()
+
+    @property
+    def native_value(self):
+        """Return the state of the sensor."""
+        return self._state
+
+    @property
+    def unique_id(self) -> str:
+        """Return a unique ID."""
+        return f"{self._walking_pad_api.mac}_total_steps"
+
+    @property
+    def name(self) -> str:
+        """Return the name of the sensor."""
+        return "Total Steps"
