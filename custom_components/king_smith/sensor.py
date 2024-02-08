@@ -49,7 +49,7 @@ class DistanceSensor(WalkingPadEntity, SensorEntity):
     _attr_has_entity_name = True
 
     def __init__(self, treadmillName: str, walking_pad_api: WalkingPadApi, coordinator: WalkingPadCoordinator) -> None:
-        self._state = 0.0
+        self._state = None
         super().__init__(treadmillName, walking_pad_api, coordinator)
 
     @callback
@@ -141,6 +141,7 @@ class StepsSensor(WalkingPadEntity, SensorEntity):
 
     _attr_state_class = SensorStateClass.TOTAL_INCREASING
     _attr_has_entity_name = True
+    _attr_icon = "mdi:walk"
 
     def __init__(self, treadmillName: str, walking_pad_api: WalkingPadApi, coordinator: WalkingPadCoordinator) -> None:
         self._state = 0
@@ -179,7 +180,7 @@ class TotalDistanceSensor(WalkingPadEntity, RestoreSensor):
     _last = 0
 
     def __init__(self, treadmillName: str, walking_pad_api: WalkingPadApi, coordinator: WalkingPadCoordinator) -> None:
-        self._state = 0.0
+        self._state = None
         self._last = 0
         super().__init__(treadmillName, walking_pad_api, coordinator)
 
@@ -193,14 +194,17 @@ class TotalDistanceSensor(WalkingPadEntity, RestoreSensor):
     @callback
     def _handle_coordinator_update(self) -> None:
         val = self._walking_pad_api.distance / 100
+        if val == None:
+            return
 
-        if val >= self._last:
-            self._state += val - self._last
+        if self._state == None:
+            self._state = val
+        elif self._last != None and val >= self._last:
+            self._state = self._state + (val - self._last)
         else:
-            self._state += val
+            self._state = self._state + val
 
         self._last = val
-
         self.async_write_ha_state()
 
     @property
@@ -243,11 +247,15 @@ class TotalTimeSensor(WalkingPadEntity, RestoreSensor):
     @callback
     def _handle_coordinator_update(self) -> None:
         val = self._walking_pad_api.time
+        if val == None:
+            return
 
-        if val >= self._last:
-            self._state += val - self._last
+        if self._state == None:
+            self._state = val
+        elif self._last != None and val >= self._last:
+            self._state = self._state + (val - self._last)
         else:
-            self._state += val
+            self._state = self._state + val
 
         self._last = val
         self.async_write_ha_state()
@@ -272,11 +280,12 @@ class TotalStepsSensor(WalkingPadEntity, RestoreSensor):
 
     _attr_state_class = SensorStateClass.TOTAL_INCREASING
     _attr_has_entity_name = True
+    _attr_icon = "mdi:walk"
 
     _last = 0
 
     def __init__(self, treadmillName: str, walking_pad_api: WalkingPadApi, coordinator: WalkingPadCoordinator) -> None:
-        self._state = 0
+        self._state = None
         self._last = 0
         super().__init__(treadmillName, walking_pad_api, coordinator)
 
@@ -290,12 +299,17 @@ class TotalStepsSensor(WalkingPadEntity, RestoreSensor):
     @callback
     def _handle_coordinator_update(self) -> None:
         val = self._walking_pad_api.steps
+        if val == None:
+            return
 
-        if val >= self._last:
-            self._state += val - self._last
+        if self._state == None:
+            self._state = val
+        elif self._last != None and val >= self._last:
+            self._state = self._state + (val - self._last)
         else:
-            self._state += val
+            self._state = self._state + val
 
+        self._last = val
         self.async_write_ha_state()
 
     @property
