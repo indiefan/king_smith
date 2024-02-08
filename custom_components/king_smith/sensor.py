@@ -62,6 +62,11 @@ class DistanceSensor(WalkingPadEntity, SensorEntity):
         """Return a unique ID."""
         return f"{self._walking_pad_api.mac}_distance"
 
+    @property
+    def name(self) -> str:
+        """Return the name of the sensor."""
+        return "Distance"
+
 class TimeSensor(WalkingPadEntity, SensorEntity):
     """Session Time walked in the current session"""
 
@@ -88,6 +93,11 @@ class TimeSensor(WalkingPadEntity, SensorEntity):
     def unique_id(self) -> str:
         """Return a unique ID."""
         return f"{self._walking_pad_api.mac}_time"
+
+    @property
+    def name(self) -> str:
+        """Return the name of the sensor."""
+        return "Duration"
 
 class SpeedSensor(WalkingPadEntity, SensorEntity):
     """Speed walked in the current session"""
@@ -116,6 +126,11 @@ class SpeedSensor(WalkingPadEntity, SensorEntity):
         """Return a unique ID."""
         return f"{self._walking_pad_api.mac}_speed"
 
+    @property
+    def name(self) -> str:
+        """Return the name of the sensor."""
+        return "Speed"
+
 class StepsSensor(WalkingPadEntity, SensorEntity):
     """Steps walked in the current session"""
 
@@ -142,6 +157,6 @@ class StepsSensor(WalkingPadEntity, SensorEntity):
         return f"{self._walking_pad_api.mac}_steps"
 
     @property
-    def name(self):
+    def name(self) -> str:
         """Return the name of the sensor."""
         return "Steps"

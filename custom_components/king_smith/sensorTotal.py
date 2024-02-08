@@ -82,7 +82,7 @@ class TotalDistanceSensor(WalkingPadEntity, RestoreSensor):
         return f"{self._walking_pad_api.mac}_total_distance"
 
     @property
-    def name(self):
+    def name(self) -> str:
         """Return the name of the sensor."""
         return "Total Distance"
 
@@ -131,7 +131,7 @@ class TotalTimeSensor(WalkingPadEntity, RestoreSensor):
         return f"{self._walking_pad_api.mac}_total_time"
 
     @property
-    def name(self):
+    def name(self) -> str:
         """Return the name of the sensor."""
         return "Total Time"
 
@@ -177,6 +177,6 @@ class TotalStepsSensor(WalkingPadEntity, RestoreSensor):
         return f"{self._walking_pad_api.mac}_total_steps"
 
     @property
-    def name(self):
+    def name(self) -> str:
         """Return the name of the sensor."""
         return "Total Steps"
