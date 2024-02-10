@@ -1,8 +1,8 @@
-
 """Walking Pad Number Entities."""
 from datetime import timedelta
 
 from homeassistant.components.number import (
+    NumberMode,
     NumberEntity,
 )
 from homeassistant.config_entries import ConfigEntry
@@ -20,6 +20,7 @@ SCAN_INTERVAL = timedelta(seconds=5)
 MIN_VALUE = 0.0
 MAX_VALUE = 6.0
 STEP = 0.1
+
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -39,6 +40,7 @@ class WalkingPadSpeed(WalkingPadEntity, NumberEntity):
 
     _attr_native_unit_of_measurement = UnitOfSpeed.KILOMETERS_PER_HOUR
     _attr_has_entity_name = True
+    _attr_mode = NumberMode.BOX
 
     def __init__(
         self,
@@ -84,3 +86,8 @@ class WalkingPadSpeed(WalkingPadEntity, NumberEntity):
     def unique_id(self) -> str:
         """Return a unique ID."""
         return f"{self._walking_pad_api.mac}_speed"
+
+    @property
+    def name(self):
+        """Name of the entity."""
+        return "Speed"

@@ -38,6 +38,9 @@ async def async_setup_entry(
 class WalkingPadSwitch(WalkingPadEntity, SwitchEntity):
     """Representation of Walkingpad Switch."""
 
+    _attr_has_entity_name = True
+    _attr_name = None
+
     def __init__(
         self,
         treadmillName: str,
@@ -88,7 +91,7 @@ class WalkingPadSwitch(WalkingPadEntity, SwitchEntity):
         self._on = False
         self.schedule_update_ha_state()
 
-    @property 
+    @property
     def unique_id(self) -> str:
         """Return a unique ID."""
         return f"{self._walking_pad_api.mac}_switch"

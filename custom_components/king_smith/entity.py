@@ -16,7 +16,9 @@ ENTITY_ID_FORMAT = DOMAIN + ".{}"
 class WalkingPadEntity(CoordinatorEntity[WalkingPadCoordinator]):
     """Walking Pad Entity Base Class."""
 
-    def __init__(self, treadmillName: str, walking_pad_api: WalkingPadApi, coordinator) -> None:
+    def __init__(
+        self, treadmillName: str, walking_pad_api: WalkingPadApi, coordinator
+    ) -> None:
         """Initialize the entity."""
         super().__init__(coordinator)
         self._coordinator = coordinator
@@ -49,6 +51,8 @@ class WalkingPadEntity(CoordinatorEntity[WalkingPadCoordinator]):
         return True
 
     @property
-    def available(self):
-        """Available."""
-        return self._walking_pad_api.connected
+    def available(self) -> bool:
+        """Return entity available state."""
+        if self._walking_pad_api is not None and self._walking_pad_api.connected:
+            return True
+        return False
