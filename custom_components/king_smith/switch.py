@@ -10,7 +10,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_NAME
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-
+from homeassistant.exceptions import ConfigEntryNotReady
 
 from .const import DOMAIN
 from .coordinator import WalkingPadCoordinator
@@ -63,7 +63,10 @@ class WalkingPadSwitch(WalkingPadEntity, SwitchEntity):
     async def async_added_to_hass(self) -> None:
         """Handle the entity being added to hass."""
         await super().async_added_to_hass()
-        await self._walking_pad_api.connect()
+        try:
+            await self._walking_pad_api.connect()
+        except Exception as e:
+            _LOGGER.warn("failed to connect to Walking Pad: %s", e)
 
     async def async_will_remove_from_hass(self) -> None:
         """Handle the entity being removed from hass."""

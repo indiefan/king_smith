@@ -5,7 +5,7 @@ import logging
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components import bluetooth
-from homeassistant.const import Platform, CONF_NAME, CONF_MAC
+from homeassistant.const import Platform, CONF_NAME, CONF_MAC, CONF_DEVICE_ID
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 
@@ -16,6 +16,7 @@ from .walking_pad import WalkingPadApi
 PLATFORMS: list[Platform] = [Platform.SWITCH, Platform.NUMBER, Platform.SENSOR]
 
 _LOGGER = logging.getLogger(__name__)
+
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Walkingpad from a config entry."""
@@ -38,11 +39,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     name = entry.data.get(CONF_NAME) or DOMAIN
     walking_pad = WalkingPadApi(name, ble_device)
+
     hass.data[DOMAIN][entry.entry_id] = {
         "device": walking_pad,
-        "coordinator": WalkingPadCoordinator(hass, walking_pad),
+        "coordinator": WalkingPadCoordinator(hass, walking_pad, entry.entry_id),
     }
-
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     return True

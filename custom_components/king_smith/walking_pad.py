@@ -180,6 +180,10 @@ class WalkingPadApi:
     async def update_state(self) -> None:
         """Update device state."""
         if self.connected is not True:
+            try:
+                await self.connect()
+            except Exception as e:
+                _LOGGER.warn("failed to connect to Walking Pad: %s", e)
             return
 
         # Grab the lock so we don't run while another command is running
