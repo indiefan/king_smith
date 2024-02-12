@@ -189,7 +189,12 @@ class WalkingPadApi:
         # Grab the lock so we don't run while another command is running
         lock = self._begin_cmd()
         async with lock:
-            # Disable status lock so our update triggers a refresh
-            self._status_lock = False
-            await self._ctrl.ask_stats()
-            # Skip callback so we don't reset debouncer
+            try:
+                # Disable status lock so our update triggers a refresh
+                self._status_lock = False
+                await self._ctrl.ask_stats()
+            except Exception as e:
+                _LOGGER.warn("failed to request status update from Walking Pad: %s", e)
+                await self._ctrl.disconnect()
+                self._connected = False
+                # Skip callback so we don't reset debouncer
