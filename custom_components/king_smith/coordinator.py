@@ -71,7 +71,7 @@ class WalkingPadCoordinator(DataUpdateCoordinator[None]):
                 "duration": self._last_status.time,
                 "steps": self._last_status.steps,
                 "dist": self._last_status.dist / 100,
-                "avg_step_cadence": (self._last_status.steps / float(self._last_status.time)/60),
+                "avg_step_cadence": (self._last_status.steps / (float(self._last_status.time)/60)),
                 "avg_speed": (
                     float(self._last_status.dist / 100)
                     / (float(self._last_status.time) / 3600.0)
