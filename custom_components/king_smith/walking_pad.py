@@ -65,9 +65,11 @@ class WalkingPadApi:
         self._steps = status.steps
 
         # only try to calculate cadence if we have all needed infos
-        if  self._moving and self._last_status_time > 0 and self._last_status.speed > 0  and self._last_status_time != status.time:
+        if  self._moving and self._last_status_time > 0 and self._last_status.speed > 0 and self._last_status.time != status.time:
             # calculate steps per minute
-            self._step_cadence = (status.steps - self._last_status.steps) / ((status.time - self._last_status.time)/60)
+            self._step_cadence = round((status.steps - self._last_status.steps) / float(float(status.time - self._last_status.time)/60.0), 2)
+            if self._step_cadence < 0:
+                self._step_cadence = 0
         else:
             self._step_cadence = 0
 
