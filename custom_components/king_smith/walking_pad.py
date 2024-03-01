@@ -23,7 +23,7 @@ class WalkingPadApi:
         self._callbacks = []
         self._status_lock = False
         self._last_cmd_time = time.time()
-    
+
         self._connected = False
         self._moving = False
         self._speed = 0
@@ -78,7 +78,7 @@ class WalkingPadApi:
         if len(self._callbacks) > 0:
             for callback in self._callbacks:
                 callback(status)
-                
+
 
     def register_status_callback(self, callback) -> None:
         """Register a status callback."""

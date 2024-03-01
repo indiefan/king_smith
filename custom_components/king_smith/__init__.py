@@ -5,7 +5,7 @@ import logging
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components import bluetooth
-from homeassistant.const import Platform, CONF_NAME, CONF_MAC, CONF_DEVICE_ID
+from homeassistant.const import Platform, CONF_NAME, CONF_MAC
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 
