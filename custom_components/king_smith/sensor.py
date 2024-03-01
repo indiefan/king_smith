@@ -35,6 +35,7 @@ async def async_setup_entry(
     timeEntity = TimeSensor(treadmillName, walking_pad_api, coordinator)
     speedEntity = SpeedSensor(treadmillName, walking_pad_api, coordinator)
     stepsEntity = StepsSensor(treadmillName, walking_pad_api, coordinator)
+    stepCadenceEntity = StepCadenceSensor(treadmillName, walking_pad_api, coordinator)
 
     totalDistanceEntity = TotalDistanceSensor(
         treadmillName, walking_pad_api, coordinator
@@ -51,6 +52,7 @@ async def async_setup_entry(
             totalDistanceEntity,
             totalTimeEntity,
             totalStepsEntity,
+            stepCadenceEntity,
         ]
     )
 
