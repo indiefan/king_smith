@@ -23,13 +23,17 @@ class WalkingPadApi:
         self._callbacks = []
         self._status_lock = False
         self._last_cmd_time = time.time()
-
+    
         self._connected = False
         self._moving = False
         self._speed = 0
         self._distance = 0
         self._time = 0
         self._steps = 0
+        self._step_cadence = 0
+
+        self._last_status = {}
+        self._last_status_time = 0.0
 
         self._register_controller_callbacks()
 
@@ -60,9 +64,21 @@ class WalkingPadApi:
         self._time = status.time
         self._steps = status.steps
 
+        # only try to calculate cadence if we have all needed infos
+        if  self._moving and self._last_status_time > 0 and self._last_status.speed > 0:
+            # calculate steps per minute
+            self._step_cadence = (status.steps - self._last_status.steps) / ((status.time - self._last_status.time)/60)
+        else:
+            self._step_cadence = 0
+
+        # store last status msg
+        self._last_status_time = time.time()
+        self._last_status = status
+
         if len(self._callbacks) > 0:
             for callback in self._callbacks:
                 callback(status)
+                
 
     def register_status_callback(self, callback) -> None:
         """Register a status callback."""
@@ -107,6 +123,11 @@ class WalkingPadApi:
     def steps(self):
         """The number of steps taken in the current session."""
         return self._steps
+
+    @property
+    def step_cadence(self):
+        """The steps cadence in steps per minute based on the current and last value."""
+        return self._step_cadence
 
     async def connect(self) -> None:
         """Connect the device."""

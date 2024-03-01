@@ -208,6 +208,43 @@ class StepsSensor(WalkingPadEntity, SensorEntity):
         return "Steps"
 
 
+class StepCadenceSensor(WalkingPadEntity, SensorEntity):
+    """Steps cadence in steps per minute."""
+
+    _attr_state_class = SensorStateClass.MEASUREMENT
+    _attr_has_entity_name = True
+    _attr_icon = "mdi:walk"
+
+    def __init__(
+        self,
+        treadmillName: str,
+        walking_pad_api: WalkingPadApi,
+        coordinator: WalkingPadCoordinator,
+    ) -> None:
+        self._state = 0.0
+        super().__init__(treadmillName, walking_pad_api, coordinator)
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        self._state = self._walking_pad_api.step_cadence
+        self.async_write_ha_state()
+
+    @property
+    def native_value(self):
+        """Return the state of the sensor."""
+        return self._state
+
+    @property
+    def unique_id(self) -> str:
+        """Return a unique ID."""
+        return f"{self._walking_pad_api.mac}_step_cadence"
+
+    @property
+    def name(self) -> str:
+        """Return the name of the sensor."""
+        return "Step Cadence"
+
+
 class TotalDistanceSensor(WalkingPadEntity, RestoreSensor):
     """Total Distance walked since HA restart."""
 
