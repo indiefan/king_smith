@@ -1,8 +1,7 @@
 {
     "name": "King Smith",
-    "filename": "king_smith.zip",
-    "hide_default_branch": true,
+    "hide_default_branch": false,
     "homeassistant": "2023.8.0",
     "render_readme": true,
-    "zip_release": true
+    "zip_release": false
 }
