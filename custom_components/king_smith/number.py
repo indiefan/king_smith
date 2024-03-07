@@ -19,7 +19,7 @@ from .walking_pad import WalkingPadApi
 SCAN_INTERVAL = timedelta(seconds=5)
 KPH_TO_MPH = 0.621371
 MIN_VALUE = 0.0
-MAX_VALUE = 4.0
+MAX_VALUE = 6.0
 STEP = 0.1
 
 

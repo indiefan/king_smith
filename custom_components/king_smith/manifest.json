@@ -4,6 +4,9 @@
     "bluetooth": [
         {
             "local_name": "KS-BL*"
+        },
+        {
+            "local_name": "WalkingPad"
         }
     ],
     "codeowners": [
@@ -13,9 +16,9 @@
     "dependencies": [
         "bluetooth"
     ],
-    "documentation": "https://github.com/indiefan/king_smith",
+    "documentation": "https://github.com/jonwest/hass_kingsmith",
     "iot_class": "local_polling",
-    "issue_tracker": "https://github.com/indiefan/king_smith/issues",
+    "issue_tracker": "https://github.com/jonwest/hass_kingsmith/issues",
     "requirements": [
         "bleak>=0.18.0",
         "ph4-walkingpad>=0.0.7"
