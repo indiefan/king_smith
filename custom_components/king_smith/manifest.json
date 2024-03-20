@@ -6,6 +6,9 @@
             "local_name": "KS-BL*"
         },
         {
+            "local_name": "KS-ST-*"
+        },
+        {
             "local_name": "WalkingPad"
         }
     ],
@@ -23,5 +26,5 @@
         "bleak>=0.18.0",
         "ph4-walkingpad>=0.0.7"
     ],
-    "version": "0.1.0"
+    "version": "0.1.2"
 }
