@@ -16,12 +16,15 @@ ENTITY_ID_FORMAT = DOMAIN + ".{}"
 class WalkingPadEntity(CoordinatorEntity[WalkingPadCoordinator]):
     """Walking Pad Entity Base Class."""
 
-    def __init__(self, name: str, walking_pad_api: WalkingPadApi, coordinator) -> None:
+    def __init__(
+        self, treadmillName: str, walking_pad_api: WalkingPadApi, coordinator
+    ) -> None:
         """Initialize the entity."""
         super().__init__(coordinator)
         self._coordinator = coordinator
         self._walking_pad_api = walking_pad_api
-        self.entity_id = generate_entity_id(ENTITY_ID_FORMAT, self._name, [])
+        self._treadmillName = treadmillName
+        self.entity_id = generate_entity_id(ENTITY_ID_FORMAT, self._treadmillName, [])
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -35,22 +38,12 @@ class WalkingPadEntity(CoordinatorEntity[WalkingPadCoordinator]):
     def device_info(self) -> dict[str, Any]:
         """Return the device info."""
         prop = {
-            "identifiers": {(DOMAIN, self.unique_id)},
-            "name": self._name,
+            "identifiers": {(DOMAIN, self._walking_pad_api.mac)},
+            "name": self._treadmillName,
             "manufacturer": "King Smith",
         }
 
         return prop
-
-    @property
-    def unique_id(self) -> str:
-        """Return the unique id of the switch."""
-        return self._walking_pad_api.mac
-
-    @property
-    def name(self):
-        """Name."""
-        return self._name
 
     @property
     def should_poll(self):
@@ -58,6 +51,8 @@ class WalkingPadEntity(CoordinatorEntity[WalkingPadCoordinator]):
         return True
 
     @property
-    def available(self):
-        """Available."""
-        return self._walking_pad_api.connected
+    def available(self) -> bool:
+        """Return entity available state."""
+        if self._walking_pad_api is not None and self._walking_pad_api.connected:
+            return True
+        return False

@@ -1,0 +1,8 @@
+{
+    "device_automation": {
+        "trigger_type": {
+            "session_start": "Session Started",
+            "session_done": "Session Completed"
+        }
+    }
+}
