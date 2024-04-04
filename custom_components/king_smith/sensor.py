@@ -232,7 +232,7 @@ class StepCadenceSensor(WalkingPadEntity, SensorEntity):
 
     @callback
     def _handle_coordinator_update(self) -> None:
-        self._state = self._walking_pad_api.step_cadence
+        self._state = self._walking_pad_api.step_cadence_mean
         self.async_write_ha_state()
 
     @property

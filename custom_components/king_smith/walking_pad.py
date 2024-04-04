@@ -2,6 +2,7 @@
 import asyncio
 import logging
 import time
+import statistics
 
 from bleak.backends.device import BLEDevice
 
@@ -26,11 +27,13 @@ class WalkingPadApi:
 
         self._connected = False
         self._moving = False
-        self._speed = 0
+        self._speed = 0.0
         self._distance = 0
         self._time = 0
         self._steps = 0
-        self._step_cadence = 0
+        self._step_cadence = 0.0
+        self._step_cadence_mean = 0.0
+        self._step_cadence_mean_calc = []
 
         self._last_status = {}
         self._last_status_time = 0.0
@@ -65,13 +68,31 @@ class WalkingPadApi:
         self._steps = status.steps
 
         # only try to calculate cadence if we have all needed infos
-        if  self._moving and self._last_status_time > 0 and self._last_status.speed > 0 and self._last_status.time != status.time:
+        if (
+            self._moving
+            and self._last_status_time > 0
+            and self._last_status.speed > 0
+            and self._last_status.time != status.time
+        ):
             # calculate steps per minute
-            self._step_cadence = round((status.steps - self._last_status.steps) / float(float(status.time - self._last_status.time)/60.0), 2)
+            self._step_cadence = round(
+                (status.steps - self._last_status.steps)
+                / float(float(status.time - self._last_status.time) / 60.0),
+                2,
+            )
             if self._step_cadence < 0:
-                self._step_cadence = 0
+                self._step_cadence = 0.0
         else:
-            self._step_cadence = 0
+            self._step_cadence = 0.0
+
+        if not self._moving:
+            self._step_cadence_mean_calc = []
+            self._step_cadence_mean = 0.0
+        else:
+            self._step_cadence_mean_calc.append(self._step_cadence)
+            if len(self._step_cadence_mean_calc) > 10:
+                self._step_cadence_mean_calc.pop(0)
+            self._step_cadence_mean = statistics.fmean(self._step_cadence_mean_calc)
 
         # store last status msg
         self._last_status_time = time.time()
@@ -80,7 +101,6 @@ class WalkingPadApi:
         if len(self._callbacks) > 0:
             for callback in self._callbacks:
                 callback(status)
-
 
     def register_status_callback(self, callback) -> None:
         """Register a status callback."""
@@ -128,8 +148,13 @@ class WalkingPadApi:
 
     @property
     def step_cadence(self):
-        """The steps cadence in steps per minute based on the current and last value."""
+        """The steps cadence in steps per minute based on the current and last value. This Value will be unstable at low speeds."""
         return self._step_cadence
+
+    @property
+    def step_cadence_mean(self):
+        """The steps cadence in steps per minute based on up to 10 last values."""
+        return self._step_cadence_mean
 
     async def connect(self) -> None:
         """Connect the device."""
