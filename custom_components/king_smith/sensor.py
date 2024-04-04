@@ -71,6 +71,7 @@ class DistanceSensor(WalkingPadEntity, SensorEntity):
         walking_pad_api: WalkingPadApi,
         coordinator: WalkingPadCoordinator,
     ) -> None:
+        """Init Sensor."""
         self._state = 0.0
         super().__init__(treadmillName, walking_pad_api, coordinator)
 
@@ -109,6 +110,7 @@ class TimeSensor(WalkingPadEntity, SensorEntity):
         walking_pad_api: WalkingPadApi,
         coordinator: WalkingPadCoordinator,
     ) -> None:
+        """Init Sensor."""
         self._state = 0
         super().__init__(treadmillName, walking_pad_api, coordinator)
 
@@ -147,6 +149,7 @@ class SpeedSensor(WalkingPadEntity, SensorEntity):
         walking_pad_api: WalkingPadApi,
         coordinator: WalkingPadCoordinator,
     ) -> None:
+        """Init Sensor."""
         self._state = 0.0
         super().__init__(treadmillName, walking_pad_api, coordinator)
 
@@ -184,6 +187,7 @@ class StepsSensor(WalkingPadEntity, SensorEntity):
         walking_pad_api: WalkingPadApi,
         coordinator: WalkingPadCoordinator,
     ) -> None:
+        """Init Sensor."""
         self._state = 0
         super().__init__(treadmillName, walking_pad_api, coordinator)
 
@@ -215,12 +219,14 @@ class StepCadenceSensor(WalkingPadEntity, SensorEntity):
     _attr_has_entity_name = True
     _attr_suggested_display_precision = 1
     _attr_icon = "mdi:walk"
+
     def __init__(
         self,
         treadmillName: str,
         walking_pad_api: WalkingPadApi,
         coordinator: WalkingPadCoordinator,
     ) -> None:
+        """Init Sensor."""
         self._state = 0.0
         super().__init__(treadmillName, walking_pad_api, coordinator)
 
@@ -261,6 +267,7 @@ class TotalDistanceSensor(WalkingPadEntity, RestoreSensor):
         walking_pad_api: WalkingPadApi,
         coordinator: WalkingPadCoordinator,
     ) -> None:
+        """Init Sensor."""
         self._state = 0.0
         self._last = 0
         super().__init__(treadmillName, walking_pad_api, coordinator)
@@ -320,6 +327,7 @@ class TotalTimeSensor(WalkingPadEntity, RestoreSensor):
         walking_pad_api: WalkingPadApi,
         coordinator: WalkingPadCoordinator,
     ) -> None:
+        """Init Sensor."""
         self._state = 0
         self._last = 0
         super().__init__(treadmillName, walking_pad_api, coordinator)
@@ -378,6 +386,7 @@ class TotalStepsSensor(WalkingPadEntity, RestoreSensor):
         walking_pad_api: WalkingPadApi,
         coordinator: WalkingPadCoordinator,
     ) -> None:
+        """Init Sensor."""
         self._state = 0
         self._last = 0
         super().__init__(treadmillName, walking_pad_api, coordinator)
