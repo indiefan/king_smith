@@ -72,7 +72,7 @@ class DistanceSensor(WalkingPadEntity, SensorEntity):
         coordinator: WalkingPadCoordinator,
     ) -> None:
         self._state = 0.0
-        super().__init__(treadmillName, walking_pad_api, coordinator)
+        super().__init__(treadmillName, self.name, walking_pad_api, coordinator)
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -110,7 +110,7 @@ class TimeSensor(WalkingPadEntity, SensorEntity):
         coordinator: WalkingPadCoordinator,
     ) -> None:
         self._state = 0
-        super().__init__(treadmillName, walking_pad_api, coordinator)
+        super().__init__(treadmillName, self.name, walking_pad_api, coordinator)
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -148,7 +148,7 @@ class SpeedSensor(WalkingPadEntity, SensorEntity):
         coordinator: WalkingPadCoordinator,
     ) -> None:
         self._state = 0.0
-        super().__init__(treadmillName, walking_pad_api, coordinator)
+        super().__init__(treadmillName, self.name, walking_pad_api, coordinator)
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -185,7 +185,7 @@ class StepsSensor(WalkingPadEntity, SensorEntity):
         coordinator: WalkingPadCoordinator,
     ) -> None:
         self._state = 0
-        super().__init__(treadmillName, walking_pad_api, coordinator)
+        super().__init__(treadmillName, self.name, walking_pad_api, coordinator)
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -222,7 +222,7 @@ class StepCadenceSensor(WalkingPadEntity, SensorEntity):
         coordinator: WalkingPadCoordinator,
     ) -> None:
         self._state = 0.0
-        super().__init__(treadmillName, walking_pad_api, coordinator)
+        super().__init__(treadmillName, self.name, walking_pad_api, coordinator)
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -263,7 +263,7 @@ class TotalDistanceSensor(WalkingPadEntity, RestoreSensor):
     ) -> None:
         self._state = 0.0
         self._last = 0
-        super().__init__(treadmillName, walking_pad_api, coordinator)
+        super().__init__(treadmillName, self.name, walking_pad_api, coordinator)
 
     async def async_added_to_hass(self) -> None:
         """Restore native_value."""
@@ -322,7 +322,7 @@ class TotalTimeSensor(WalkingPadEntity, RestoreSensor):
     ) -> None:
         self._state = 0
         self._last = 0
-        super().__init__(treadmillName, walking_pad_api, coordinator)
+        super().__init__(treadmillName, self.name, walking_pad_api, coordinator)
 
     async def async_added_to_hass(self) -> None:
         """Restore native_value."""
@@ -380,7 +380,7 @@ class TotalStepsSensor(WalkingPadEntity, RestoreSensor):
     ) -> None:
         self._state = 0
         self._last = 0
-        super().__init__(treadmillName, walking_pad_api, coordinator)
+        super().__init__(treadmillName, self.name, walking_pad_api, coordinator)
 
     async def async_added_to_hass(self) -> None:
         """Restore native_value."""

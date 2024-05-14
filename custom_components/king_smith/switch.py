@@ -49,7 +49,7 @@ class WalkingPadSwitch(WalkingPadEntity, SwitchEntity):
         """Initialize the belt."""
         self._on = walking_pad_api.moving
 
-        super().__init__(treadmillName, walking_pad_api, coordinator)
+        super().__init__(treadmillName, "", walking_pad_api, coordinator)
 
     @callback
     def _handle_coordinator_update(self) -> None:
