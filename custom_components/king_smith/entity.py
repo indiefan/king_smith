@@ -17,14 +17,14 @@ class WalkingPadEntity(CoordinatorEntity[WalkingPadCoordinator]):
     """Walking Pad Entity Base Class."""
 
     def __init__(
-        self, treadmillName: str, walking_pad_api: WalkingPadApi, coordinator
+        self, treadmillName: str, entityName: str, walking_pad_api: WalkingPadApi, coordinator
     ) -> None:
         """Initialize the entity."""
         super().__init__(coordinator)
         self._coordinator = coordinator
         self._walking_pad_api = walking_pad_api
         self._treadmillName = treadmillName
-        self.entity_id = generate_entity_id(ENTITY_ID_FORMAT, self._treadmillName, [])
+        self.entity_id = generate_entity_id(ENTITY_ID_FORMAT, f"{self._treadmillName} {entityName}", [])
 
     @callback
     def _handle_coordinator_update(self) -> None:

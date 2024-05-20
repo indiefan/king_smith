@@ -50,7 +50,7 @@ class WalkingPadSpeed(WalkingPadEntity, NumberEntity):
     ) -> None:
         """Initialize the Number entity."""
         self._kph = walking_pad_api.speed / 10.0
-        super().__init__(treadmillName, walking_pad_api, coordinator)
+        super().__init__(treadmillName, self.name, walking_pad_api, coordinator)
 
     @callback
     def _handle_coordinator_update(self) -> None:
