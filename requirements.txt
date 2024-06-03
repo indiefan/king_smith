@@ -1,6 +1,6 @@
 colorlog==6.8.2
 homeassistant==2023.8.0
-ruff==0.2.2
+ruff==0.4.7
 pip>=21.0,<24.1
 bleak>=0.18.0
 ph4-walkingpad>=0.0.7
