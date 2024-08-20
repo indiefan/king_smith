@@ -13,9 +13,10 @@ from .const import DOMAIN
 from .coordinator import WalkingPadCoordinator
 from .walking_pad import WalkingPadApi
 
-PLATFORMS: list[Platform] = [Platform.SWITCH, Platform.NUMBER]
+PLATFORMS: list[Platform] = [Platform.SWITCH, Platform.NUMBER, Platform.SENSOR]
 
 _LOGGER = logging.getLogger(__name__)
+
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Walkingpad from a config entry."""
@@ -38,11 +39,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     name = entry.data.get(CONF_NAME) or DOMAIN
     walking_pad = WalkingPadApi(name, ble_device)
+
     hass.data[DOMAIN][entry.entry_id] = {
         "device": walking_pad,
-        "coordinator": WalkingPadCoordinator(hass, walking_pad),
+        "coordinator": WalkingPadCoordinator(hass, walking_pad, entry.entry_id),
     }
-
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     return True
@@ -53,4 +54,11 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
         hass.data[DOMAIN].pop(entry.entry_id)
 
+    bluetooth.async_rediscover_address(hass, entry.data.get(CONF_MAC))
+
     return unload_ok
+
+async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Reload config entry."""
+    await async_unload_entry(hass, entry)
+    await async_setup_entry(hass, entry)
