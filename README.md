@@ -35,6 +35,7 @@ In order for the device to be connected to HA, it must not be connected to anoth
 
 * C2
 * A1 Pro
+* Walkingpad R2
 
 (if you have a King Smith treadmill and would like to verify support, please reach out)
 

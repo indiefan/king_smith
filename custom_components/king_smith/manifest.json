@@ -10,7 +10,10 @@
         },
         {
             "local_name": "WalkingPad"
-        }
+        },
+        {
+            "local_name": "KS-HCR*"
+        }        
     ],
     "codeowners": [
         "@indiefan"
