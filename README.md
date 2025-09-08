@@ -44,14 +44,14 @@ If you want to contribute to this please read the [Contribution guidelines](CONT
 
 ***
 
-[king_smith]: https://github.com/ludeeus/integration_blueprint
+[king_smith]: https://github.com/gwyntel/king_smith
 [buymecoffee]: https://www.buymeacoffee.com/indiefan
 [buymecoffeebadge]: https://img.shields.io/badge/buy%20me%20a%20coffee-donate-yellow.svg?style=for-the-badge
-[commits-shield]: https://img.shields.io/github/commit-activity/y/indiefan/king_smith.svg?style=for-the-badge
-[commits]: https://github.com/indiefan/king_smith/commits/main
+[commits-shield]: https://img.shields.io/github/commit-activity/y/gwyntel/king_smith.svg?style=for-the-badge
+[commits]: https://github.com/gwyntel/king_smith/commits/main
 [exampleimg]: example.png
 [forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge
 [forum]: https://community.home-assistant.io/
-[license-shield]: https://img.shields.io/github/license/indiefan/king_smith.svg?style=for-the-badge
-[releases-shield]: https://img.shields.io/github/release/indiefan/king_smith.svg?style=for-the-badge
-[releases]: https://github.com/indiefan/king_smith/releases
+[license-shield]: https://img.shields.io/github/license/gwyntel/king_smith.svg?style=for-the-badge
+[releases-shield]: https://img.shields.io/github/release/gwyntel/king_smith.svg?style=for-the-badge
+[releases]: https://github.com/gwyntel/king_smith/releases
